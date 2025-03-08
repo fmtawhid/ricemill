@@ -18,7 +18,7 @@
                 <h4 class="page-title">Posts</h4>
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item">
-                        <a href="{{ route('posts.create') }}" class="btn btn-primary">
+                        <a href="{{ route('posts.create', ['user_id' => auth()->id()]) }}" class="btn btn-primary">
                             <i class="ri-add-circle-line"></i> Add Post
                         </a>
                     </li>
@@ -91,7 +91,7 @@
             let table = $("#post_table").DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('posts.index') }}", // The URL for fetching the posts
+                ajax: "{{ route('posts.index', ['user_id' => auth()->id()]) }}", // The URL for fetching the posts
                 columns: [
                     { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
                     { data: "title", name: "title" },

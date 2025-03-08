@@ -197,7 +197,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\SettingServiceProvider::class,
-        App\Providers\TenancyServiceProvider::class,
+
+
+        App\Providers\CategoryServiceProvider::class,
 
         // this is notice service provider
         // App\Providers\NoticeServiceProvider::class,

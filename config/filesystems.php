@@ -28,7 +28,6 @@ return [
     |
     */
 
-
     'disks' => [
 
         'local' => [

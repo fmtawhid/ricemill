@@ -83,7 +83,7 @@
                     </div>
                     @enderror
                     <div class="row">
-                        <!-- <div class="col-8">
+                        <div class="col-8">
                             <div class="icheck-primary">
                                 <input type="checkbox" id="remember" {{ old('remember') ? 'checked' : '' }}>
                                 <label for="remember">
@@ -92,22 +92,23 @@
                             </div>
                             <br>
 
-                            
+                            <!-- reCAPTCHA Widget
                             <div class="g-recaptcha" data-sitekey="6Ld-PZ4qAAAAAL12RD-Hp6RREYhSf_WJpciwDkjk"
                                 data-callback="enableSubmitbtn"></div>
 
-                         
+                        
                             <script src="https://www.google.com/recaptcha/api.js" async defer></script>
                             <script>
                             function enableSubmitbtn() {
                                 document.getElementById("enableSubmit").disabled = false;
                             }
-                            </script>
+                            </script> -->
 
-                        </div> -->
+                        </div>
                         <!-- /.col -->
                         <div class="col-4">
-                            <button type="submit" id="enableSubmit" class="btn btn-primary btn-block">Sign In</button>
+                            <button type="submit" id="enableSubmit"
+                                class="btn btn-primary btn-block">Sign In</button>
                         </div>
                         <!-- /.col -->
                     </div>

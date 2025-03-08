@@ -1,44 +1,45 @@
-<!-- resources/views/admin/units/create.blade.php -->
 @extends('layouts.admin_master')
 
 @section('content')
+    <!-- Success and Error Messages -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @elseif(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="row">
-        <div class="col-12">
-            <h4>Create Unit</h4>
-            <form id="unit-form">
-                @csrf
-                <div class="mb-3">
-                    <label for="name" class="form-label">Unit Name</label>
-                    <input type="text" id="name" class="form-control" name="name" required>
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ route('units.store', ['user_id' => auth()->id()]) }}" method="POST">
+                        @csrf
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="name" class="form-label">Unit Name *</label>
+                                <input class="form-control" name="name" type="text" id="name" placeholder="Enter Unit Name" required>
+                                @error('name')
+                                    <div class="text-danger my-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="note" class="form-label">Note (Optional)</label>
+                                <input class="form-control" name="note" type="text" id="note" placeholder="Enter Unit Note">
+                                @error('note')
+                                    <div class="text-danger my-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="note" class="form-label">Note</label>
-                    <textarea id="note" class="form-control" name="note"></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Create Unit</button>
-            </form>
+            </div>
         </div>
     </div>
-@endsection
-
-@section('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#unit-form').on('submit', function(e) {
-                e.preventDefault();
-
-                $.ajax({
-                    url: "{{ route('units.store') }}",
-                    type: 'POST',
-                    data: new FormData(this),
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        alert(response.success);
-                        window.location.href = "{{ route('units.index') }}";
-                    }
-                });
-            });
-        }); 
-    </script>
 @endsection

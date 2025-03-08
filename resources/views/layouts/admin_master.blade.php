@@ -517,7 +517,7 @@
                         </a>
                     </li>
                     <!-- Teacher Section -->
-                    <!-- @canany(['teacher_view', 'teacher_add', 'teacher_edit', 'teacher_delete'])
+                   
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#teachersmenu" aria-expanded="false" class="side-nav-link">
                                 <i class="ri-user-line"></i>
@@ -526,24 +526,21 @@
                             </a>
                             <div class="collapse" id="teachersmenu">
                                 <ul class="side-nav-second-level">
-                                    @can('teacher_add')
-                                        <li><a href="{{ route('teacher.create') }}">Add Teacher</a></li>
-                                    @endcan
-                                    @can('teacher_view')
-                                        <li><a href="{{ route('teacher.list') }}">All Teachers</a></li>
-                                    @endcan
+                                 
+                                        <li><a href="{{ route('units.index',['user_id' => auth()->id()]) }}">Units</a></li>
+                                        <li><a href="{{ route('currencies.index', ['user_id' => auth()->id()]) }}">Currency</a></li>
                                 </ul>
                             </div>
                         </li>
-                    @endcanany -->
-                    <!-- Admission Section -->
 
 
 
 
 
-                    <!-- Authentication Section -->
-                    @canany (['user_add', 'user_view', 'user_edit', 'user_delete','permission_add', 'permission_view', 'permission_edit', 'permission_delete','role_add', 'role_view', 'role_edit', 'role_delete', ])
+
+
+                    
+                    @canany(['user_add', 'user_view', 'user_edit', 'user_delete', 'permission_add', 'permission_view', 'permission_edit', 'permission_delete', 'role_add', 'role_view', 'role_edit', 'role_delete'])
                     <li class="side-nav-item">
                         <a data-bs-toggle="collapse" href="#auth" aria-expanded="false"
                             aria-controls="sidebarTasks" class="side-nav-link">
@@ -555,49 +552,42 @@
                             <ul class="side-nav-second-level">
                                 @can('user_view')
                                 <li>
-                                    <a href="{{ route('users.index') }}">Users</a>
+                                    <a href="{{ route('users.index', ['user_id' => auth()->id()]) }}">Users</a>
                                 </li>
                                 @endcan
                                 @can('permission_view')
                                 <li>
-                                    <a href="{{ route('permissions.index') }}">Permissions</a>
+                                    <a href="{{ route('permissions.index', ['user_id' => auth()->id()]) }}">Permissions</a>
                                 </li>
                                 @endcan
                                 @can('role_view')
                                 <li>
-                                    <a href="{{ route('roles.index') }}">Roles</a>
+                                    <a href="{{ route('roles.index', ['user_id' => auth()->id()]) }}">Roles</a>
                                 </li>
                                 @endcan
                             </ul>
                         </div>
                     </li>
-                    @endcanany
-                    
-                    @can('setting_view')
-                     <!-- Setting  Section -->
-                    <li class="side-nav-item">
-                        <a data-bs-toggle="collapse" href="#settingmenu" aria-expanded="false"
-                            aria-controls="sidebarTasks" class="side-nav-link">
-                            <i class="ri-settings-line"></i>
-                            <span>Setting</span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="settingmenu">
-                            <ul class="side-nav-second-level">
-                                <li>
-                                    <a href="{{ route('setting.index') }}">Manage Setting</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('units.index') }}">Units</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('currencies.index') }}">Currency</a>
-                                </li>
-                                
-                            </ul>
-                        </div>
-                    </li>
-                    @endcan
+                @endcanany
+
+                @can('setting_view')
+                <li class="side-nav-item">
+                    <a data-bs-toggle="collapse" href="#settingmenu" aria-expanded="false"
+                        aria-controls="sidebarTasks" class="side-nav-link">
+                        <i class="ri-settings-line"></i>
+                        <span>Setting</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <div class="collapse" id="settingmenu">
+                        <ul class="side-nav-second-level">
+                            <li>
+                                <a href="{{ route('setting.index', ['user_id' => auth()->id()]) }}">Manage Setting</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                @endcan
+
                     
 
 

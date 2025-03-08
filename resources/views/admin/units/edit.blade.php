@@ -1,45 +1,46 @@
-<!-- resources/views/admin/units/edit.blade.php -->
 @extends('layouts.admin_master')
 
 @section('content')
-    <div class="row"> 
-        <div class="col-12">
-            <h4>Edit Unit</h4>
-            <form id="unit-form">
-                @csrf
-                @method('PUT')
-                <div class="mb-3">
-                    <label for="name" class="form-label">Unit Name</label>
-                    <input type="text" id="name" class="form-control" name="name" value="{{ $unit->name }}" required>
+    <!-- Success and Error Messages -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @elseif(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <form action="{{ route('units.update', ['unit' => $unit->id, 'user_id' => auth()->id()]) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="name" class="form-label">Unit Name *</label>
+                                <input class="form-control" name="name" type="text" id="name" value="{{ old('name', $unit->name) }}" placeholder="Enter Unit Name" required>
+                                @error('name')
+                                    <div class="text-danger my-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="note" class="form-label">Note (Optional)</label>
+                                <input class="form-control" name="note" type="text" id="note" value="{{ old('note', $unit->note) }}" placeholder="Enter Unit Note">
+                                @error('note')
+                                    <div class="text-danger my-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
                 </div>
-                <div class="mb-3">
-                    <label for="note" class="form-label">Note</label>
-                    <textarea id="note" class="form-control" name="note">{{ $unit->note }}</textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Update Unit</button>
-            </form>
+            </div>
         </div>
     </div>
-@endsection
-
-@section('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#unit-form').on('submit', function(e) {
-                e.preventDefault();
-
-                $.ajax({
-                    url: "{{ route('units.update', $unit->id) }}",
-                    type: 'POST',
-                    data: new FormData(this),
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        alert(response.success);
-                        window.location.href = "{{ route('units.index') }}";
-                    }
-                });
-            });
-        });
-    </script>
 @endsection

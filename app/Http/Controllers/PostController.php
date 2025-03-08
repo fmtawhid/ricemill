@@ -34,33 +34,32 @@ class PostController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            // Select all columns you need
-            $posts = Post::select(['id', 'title', 'category_id', 'status', 'slug', 'keywords', 'tags', 'short_summary', 'description', 'video_link', 'image', 'date', 'created_at'])->where('status', 'approved');;
-            
+            // Get the logged-in user
+            $user = auth()->user();
+    
+            // Fetch posts that belong to the logged-in user
+            $posts = Post::select(['id', 'title', 'category_id', 'status', 'slug', 'keywords', 'tags', 'short_summary', 'description', 'video_link', 'image', 'date', 'created_at'])
+                ->where('status', 'approved')
+                ->where('user_id', $user->id);  // Filter by user_id
+    
             return DataTables::of($posts)
-                ->addIndexColumn() // Add index column
+                ->addIndexColumn()
                 ->addColumn('category_name', function ($row) {
-                    return $row->category ? $row->category->name : 'N/A'; // Get category name
+                    return $row->category ? $row->category->name : 'N/A';
                 })
                 ->addColumn('actions', function ($row) {
-                    // Add action buttons for edit and delete
                     return '
-                        <a href="' . route('posts.edit', $row->slug) . '" class="btn btn-sm btn-warning">Edit</a>
-                        <form action="' . route('posts.destroy', $row->slug) . '" method="POST" style="display:inline-block;">
-                            <input type="hidden" name="_token" value="' . csrf_token() . '">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                        </form>
+                        
                     ';
                 })
-                ->rawColumns(['actions']) // Enable raw HTML rendering for the actions column
-                ->make(true); // Return the DataTable JSON response
-                
+                ->rawColumns(['actions'])
+                ->make(true);
         }
-        
-
-        return view('admin.posts.index'); // Return the view for the posts index page
+    
+        return view('admin.posts.index');
     }
+    
+
 
     public function pending(Request $request)
     {
@@ -92,127 +91,55 @@ class PostController extends Controller
         return view('admin.posts.pending'); // Return the view for the pending posts index page
     }
 
-public function create()
-{
-    // Fetch all categories with their subcategories
-    $categories = Category::with('subCategories')->get();
-    $newsTypes = NewsType::all();
-    return view('admin.posts.create', compact('categories', 'newsTypes'));
-}
-public function store(Request $request)
-{
-    // Validate the form data
-    $request->validate([
-        'title' => 'required|unique:posts|max:200',
-        'slug' => 'required|unique:posts|max:200',
-        'category_id' => 'required|exists:categories,id',
-        'sub_category_id' => 'nullable|exists:sub_categories,id',
-        'status' => 'required|in:pending,approved',
-        'image' => 'nullable|string',  // Accept base64 data for the image (This was the issue)
-        'keywords' => 'nullable|string',
-        'tags' => 'nullable|string',
-        'short_summary' => 'nullable|string',
-        'description' => 'nullable|string',
-        'video_link' => 'nullable|string',
-        'author_name' => 'nullable|string',
-        'date' => 'required|date',
-        'news_type_id' => 'nullable|exists:news_types,id', // Validate the news_type_id
-    ]);
+    public function create()
+    {
+        // Fetch all categories with their subcategories
+        $categories = Category::with('subCategories')->get();
+        $newsTypes = NewsType::all();
+        return view('admin.posts.create', compact('categories', 'newsTypes'));
+    }
+    public function store(Request $request)
+    {
+        // Validate the form data
+        $request->validate([
+            'title' => 'required|unique:posts|max:200',
+            'slug' => 'required|unique:posts|max:200',
+            'category_id' => 'required|exists:categories,id',
+            'sub_category_id' => 'nullable|exists:sub_categories,id',
+            'status' => 'required|in:pending,approved',
+            'image' => 'nullable|string',
+            'keywords' => 'nullable|string',
+            'tags' => 'nullable|string',
+            'short_summary' => 'nullable|string',
+            'description' => 'nullable|string',
+            'video_link' => 'nullable|string',
+            'author_name' => 'nullable|string',
+            'date' => 'required|date',
+            'news_type_id' => 'nullable|exists:news_types,id',
+        ]);
 
-    // Handle the cropped image (base64)
-    if ($request->has('cropped_image')) {
-        $imageData = $request->input('cropped_image'); // Base64 string
-        $imageData = preg_replace('#^data:image/\w+;base64,#i', '', $imageData); // Remove base64 prefix
-        $imageName = time() . '.png'; // Generate a unique name for the image
+        // Create a new post and assign user_id
+        $post = new Post();
+        $post->user_id = auth()->id(); // Assign the logged-in user ID
+        $post->title = $request->title;
+        $post->slug = $request->slug;
+        $post->keywords = $request->keywords;
+        $post->tags = $request->tags;
+        $post->short_summary = $request->short_summary;
+        $post->description = $request->description;
+        $post->video_link = $request->video_link;
+        $post->author_name = $request->author_name;
+        $post->image = $imageName ?? null;
+        $post->category_id = $request->category_id;
+        $post->sub_category_id = $request->sub_category_id;
+        $post->status = $request->status ?? 'pending';
+        $post->date = $request->date;
 
-        // Decode and save the cropped image
-        $path = public_path('img/posts/' . $imageName);
-        file_put_contents($path, base64_decode($imageData)); // Save the decoded image data
-    } else {
-        $imageName = null;  // In case no image was provided
+        $post->save();
+
+        return redirect()->route('posts.index')->with('success', 'Post created successfully!');
     }
 
-    // Create a new post
-    $post = new Post();
-    $post->title = $request->title;
-    $post->slug = $request->slug;
-    $post->keywords = $request->keywords;
-    $post->tags = $request->tags;
-    $post->short_summary = $request->short_summary;
-    $post->description = $request->description;
-    $post->video_link = $request->video_link;
-    $post->author_name = $request->author_name;
-    $post->image = $imageName; // Save the image path if available
-    $post->category_id = $request->category_id;
-    $post->sub_category_id = $request->sub_category_id;
-    $post->status = $request->status ?? 'pending';
-    $post->date = $request->date;
-
-    // Save the post
-    $post->save();
-
-    // Assign the selected news_type_id
-    if ($request->has('news_type_id')) {
-        $post->news_type_id = $request->news_type_id; // Assign the selected news type
-        $post->save(); // Save the post with the news type
-    }
-
-    return redirect()->route('posts.create')->with('success', 'Post created successfully!');
-}
-
-// public function store(Request $request)
-// {
-//     // Validate the form data
-//     $request->validate([
-//         'title' => 'required|unique:posts|max:200',
-//         'slug' => 'required|unique:posts|max:200',
-//         'category_id' => 'required|exists:categories,id',
-//         'sub_category_id' => 'nullable|exists:sub_categories,id',
-//         'status' => 'required|in:pending,approved',
-//         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-//         'keywords' => 'nullable|string',
-//         'tags' => 'nullable|string',
-//         'short_summary' => 'nullable|string',
-//         'description' => 'nullable|string',
-//         'video_link' => 'nullable|string',
-//         'date' => 'required|date',
-//         'news_type_id' => 'nullable|exists:news_types,id', // Validate the news_type_id
-//     ]);
-
-//     // Handle image upload
-//     if ($request->hasFile('image')) {
-//         $imageName = time() . '.' . $request->image->extension();
-//         $request->image->move(public_path('img/posts'), $imageName);
-//     } else {
-//         $imageName = null;
-//     }
-
-//     // Create a new post
-//     $post = new Post();
-//     $post->title = $request->title;
-//     $post->slug = $request->slug;
-//     $post->keywords = $request->keywords;
-//     $post->tags = $request->tags;
-//     $post->short_summary = $request->short_summary;
-//     $post->description = $request->description;
-//     $post->video_link = $request->video_link;
-//     $post->image = $imageName;
-//     $post->category_id = $request->category_id;
-//     $post->sub_category_id = $request->sub_category_id;
-//     $post->status = $request->status ?? 'pending';
-//     $post->date = $request->date;
-
-//     // Save the post
-//     $post->save();
-
-//     // Assign the selected news_type_id
-//     if ($request->has('news_type_id')) {
-//         $post->news_type_id = $request->news_type_id; // Assign the selected news type
-//         $post->save(); // Save the post with the news type
-//     }
-
-//     return redirect()->route('posts.index')->with('success', 'Post created successfully!');
-// }
 
 // Fetch sub-categories based on the selected category
 public function getSubCategories($categoryId)
@@ -239,16 +166,19 @@ public function getSubCategories($categoryId)
 
 public function edit($slug)
 {
-    // Fetch the post using the slug
-    $post = Post::where('slug', $slug)->firstOrFail();
-    $categories = Category::all(); // Fetch all categories for the dropdown
-    $subCategories = SubCategory::where('category_id', $post->category_id)->get(); // Get subcategories for the selected category
+    // Fetch the post by slug and ensure it's owned by the logged-in user
+    $post = Post::where('slug', $slug)->where('user_id', auth()->id())->firstOrFail();
+
+    $categories = Category::all();
+    $subCategories = SubCategory::where('category_id', $post->category_id)->get();
     $newsTypes = NewsType::all();
+
     return view('admin.posts.edit', compact('post', 'categories', 'subCategories', 'newsTypes'));
 }
+
 public function update(Request $request, $slug)
 {
-    // Validate the form data, excluding the current post's title and slug
+    // Validate form data excluding current post's title and slug
     $request->validate([
         'title' => 'required|unique:posts,title,' . $slug . ',slug|max:200',
         'slug' => 'required|unique:posts,slug,' . $slug . ',slug|max:200',
@@ -265,17 +195,15 @@ public function update(Request $request, $slug)
         'date' => 'required|date',
     ]);
 
-    // Fetch the existing post using the slug
-    $post = Post::where('slug', $slug)->firstOrFail();
+    // Fetch the post by slug and ensure it's owned by the logged-in user
+    $post = Post::where('slug', $slug)->where('user_id', auth()->id())->firstOrFail();
 
     // Handle image upload (if exists)
     if ($request->hasFile('image')) {
-        // Delete the old image if a new one is uploaded
         if ($post->image) {
             unlink(public_path('img/posts/' . $post->image));
         }
 
-        // Save the new image
         $imageName = time() . '.' . $request->image->extension();
         $request->image->move(public_path('img/posts'), $imageName);
         $post->image = $imageName;
@@ -291,17 +219,15 @@ public function update(Request $request, $slug)
     $post->video_link = $request->video_link;
     $post->author_name = $request->author_name;
     $post->category_id = $request->category_id;
-    $post->sub_category_id = $request->sub_category_id;  // Store the selected sub-category
+    $post->sub_category_id = $request->sub_category_id;
     $post->status = $request->status ?? 'pending';
     $post->date = $request->date;
-    // Update the selected news_type
-    if ($request->has('news_type_id')) {
-        $post->news_type_id = $request->news_type_id;
-    }
+
     $post->save();
 
-    return redirect()->route('posts.pending')->with('success', 'Post updated successfully!');
+    return redirect()->route('posts.index')->with('success', 'Post updated successfully!');
 }
+
 
 
 

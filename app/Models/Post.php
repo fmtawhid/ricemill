@@ -11,7 +11,7 @@ class Post extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'slug', 'keywords', 'tags', 'short_summary', 'video_link', 'image', 'category_id', 'status', 'date',
+        'title', 'slug', 'keywords', 'tags', 'short_summary', 'video_link', 'image', 'category_id', 'status', 'date', 'user_id',
     ];
 
     public function category()
@@ -21,6 +21,10 @@ class Post extends Model
     public function newsType()
     {
         return $this->belongsTo(NewsType::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
 

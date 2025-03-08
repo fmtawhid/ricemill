@@ -1,33 +1,75 @@
-<!-- resources/views/admin/currencies/index.blade.php -->
 @extends('layouts.admin_master')
 
 @section('content')
+    <!-- Success and Error Messages -->
+    @if (session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @elseif(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="row">
         <div class="col-12">
             <div class="page-title-box justify-content-between d-flex align-items-md-center flex-md-row flex-column">
                 <h4 class="page-title">Currencies</h4>
-                <a href="{{ route('currencies.create') }}" class="btn btn-primary">Add Currency</a>
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('currencies.create', ['user_id' => auth()->id()]) }}" class="btn btn-primary">
+                            <i class="ri-add-circle-line"></i> Add Currency
+                        </a>
+                    </li>
+                </ol>
             </div>
         </div>
     </div>
 
+    <!-- Currency Data Table -->
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <table id="currencies_table" class="table table-striped dt-responsive nowrap w-100">
+                    <table id="currency_table" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
-                                <th>Serial No</th>
+                                <th>#</th>
                                 <th>Name</th>
+                                <th>Icon</th>
                                 <th>Note</th>
+                                <th>Created At</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Data is fetched by DataTables -->
+                            <!-- Data will be populated via DataTables -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal" tabindex="-1" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this currency?</p>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteForm" method="POST" action="" style="display:inline-block;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
@@ -37,16 +79,43 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            $('#currencies_table').DataTable({
+            let table = $("#currency_table").DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('currencies.index') }}",
+                ajax: "{{ route('currencies.index', ['user_id' => auth()->id()]) }}", // Fetch currencies data
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                    { data: 'name', name: 'name' },
-                    { data: 'note', name: 'note' },
-                    { data: 'actions', name: 'actions', orderable: false, searchable: false },
+                    { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
+                    { data: "name", name: "name" },
+                    { data: "icon", name: "icon" },
+                    { data: "note", name: "note" },
+                    { data: "created_at", name: "created_at" },
+                    { data: "actions", name: "actions", orderable: false, searchable: false }
                 ]
+            });
+
+            let currencyId;
+            $(document).on("click", ".deleteCurrency", function() {
+                currencyId = $(this).data("id");
+                $("#deleteModal").modal("show");
+                $("#deleteForm").attr("action", "/currencies/" + currencyId);
+            });
+
+            $("#deleteForm").submit(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: $(this).attr("action"),
+                    type: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+                    },
+                    success: function(response) {
+                        $("#deleteModal").modal("hide");
+                        table.ajax.reload();
+                    },
+                    error: function(error) {
+                        console.error("Error deleting currency", error);
+                    }
+                });
             });
         });
     </script>

@@ -9,12 +9,11 @@ use Laravel\Sanctum\HasApiTokens;
 // use Spatie\Permission\Traits\HasRoles; // Spatie HasRoles ট্রেইট
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Permission\Traits\HasRoles;
-use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class User extends Authenticatable
 {
     use HasRoles;
-    use HasApiTokens, HasFactory, Notifiable, BelongsToTenant; // HasRoles যুক্ত করা
+    use HasApiTokens, HasFactory, Notifiable; // HasRoles যুক্ত করা
     // use SoftDeletes;
 
     /**
@@ -56,5 +55,9 @@ class User extends Authenticatable
     public function isCustomer()
     {
         return $this->role === 'customer';
+    }
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 }

@@ -41,7 +41,7 @@
             <div class="card">
                 <div class="card-body">
                     <!-- Form to create a post -->
-                    <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data" id="postForm">
+                    <form action="{{ route('posts.store', ['user_id' => auth()->id()]) }}" method="POST" enctype="multipart/form-data" id="postForm">
                         @csrf
                         <div class="row">
                             <div class="mb-3 col-md-6">
