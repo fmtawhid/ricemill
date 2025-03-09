@@ -521,7 +521,7 @@
                         <li class="side-nav-item">
                             <a data-bs-toggle="collapse" href="#teachersmenu" aria-expanded="false" class="side-nav-link">
                                 <i class="ri-user-line"></i>
-                                <span>Teachers</span>
+                                <span>Sort Type</span>
                                 <span class="menu-arrow"></span>
                             </a>
                             <div class="collapse" id="teachersmenu">

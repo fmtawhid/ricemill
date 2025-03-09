@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\SreniController;
 use App\Http\Controllers\Admin\StudentController;
 
 
-use App\Http\Controllers\CategoryController;
+
 use App\Http\Controllers\NewsTypeController;
 
 
@@ -23,10 +23,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\NoticeController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\AttendanceTypeController;
-use App\Http\Controllers\TeacherAttendanceController;
-use App\Http\Controllers\AttachmentController;
-use App\Http\Controllers\AttachmentTypeController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RoleController;
 
@@ -51,6 +47,12 @@ use App\Http\Controllers\SubCategoryController;
 // Controller
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\GodownController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NatureController;
+use App\Http\Controllers\GroupUnderController;
+use App\Http\Controllers\AccountGroupController;
+use App\Http\Controllers\AccountLedgerController;
 
 
 
@@ -76,6 +78,12 @@ Route::prefix('panel/{user_id}')->middleware(['auth', 'checkUserOwnership'])->gr
 
     Route::resource('units', UnitController::class);
     Route::resource('currencies', CurrencyController::class);
+    Route::resource('godowns', GodownController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('natures', NatureController::class);
+    Route::resource('group_unders', GroupUnderController::class);
+    Route::resource('account_groups', AccountGroupController::class);
+    Route::resource('account_ledgers', AccountLedgerController::class);
 
 
 
@@ -169,15 +177,6 @@ Route::prefix('panel/{user_id}')->middleware(['auth', 'checkUserOwnership'])->gr
 
 
 
-
-
-    // Display a listing of categories
-    Route::middleware(['permission:category_view'])->get('categories', [CategoryController::class, 'index'])->name('categories.index');
-    Route::middleware(['permission:category_add'])->get('categories/create', [CategoryController::class, 'create'])->name('categories.create');
-    Route::middleware(['permission:category_add'])->post('categories', [CategoryController::class, 'store'])->name('categories.store');
-    Route::middleware(['permission:category_edit'])->get('categories/{slug}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
-    Route::middleware(['permission:category_edit'])->put('categories/{slug}', [CategoryController::class, 'update'])->name('categories.update');
-    Route::middleware(['permission:category_delete'])->delete('categories/{slug}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 
 
     // List all subcategories

@@ -79,16 +79,19 @@ class UnitController extends Controller
     }
 
     // Show the form to edit an existing unit
-    public function edit($id)
+    // Show the form to edit an existing unit
+    public function edit($user_id, $id)
     {
         $unit = Unit::findOrFail($id);
         
+        // Ensure the unit belongs to the current user
         if ($unit->user_id !== auth()->id()) {
             return redirect()->route('units.index')->with('error', 'Unauthorized');
         }
 
         return view('admin.units.edit', compact('unit'));
     }
+
 
     // Update an existing unit
     public function update(Request $request, $id)
@@ -114,17 +117,21 @@ class UnitController extends Controller
     }
 
     // Delete a unit
-    public function destroy($id)
+    public function destroy($user_id, $id)
     {
+        // Find the unit by ID
         $unit = Unit::findOrFail($id);
 
         // Ensure the logged-in user owns this unit
         if ($unit->user_id !== auth()->id()) {
-            return redirect()->route('units.index')->with('error', 'Unauthorized');
+            return redirect()->route('units.index', ['user_id' => $user_id])->with('error', 'Unauthorized');
         }
 
+        // Delete the unit
         $unit->delete();
 
-        return redirect()->route('units.index')->with('success', 'Unit deleted successfully!');
+        // Redirect back to the units index page
+        return redirect()->route('units.index', ['user_id' => $user_id])->with('success', 'Unit deleted successfully!');
     }
+
 }

@@ -15,11 +15,11 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box justify-content-between d-flex align-items-md-center flex-md-row flex-column">
-                <h4 class="page-title">Categories</h4>
+                <h4 class="page-title">Group Unders</h4>
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item">
-                        <a href="{{ route('categories.create', ['user_id' => auth()->id()]) }}" class="btn btn-primary">
-                            <i class="ri-add-circle-line"></i> Add Category
+                        <a href="{{ route('group_unders.create', ['user_id' => auth()->id()]) }}" class="btn btn-primary">
+                            <i class="ri-add-circle-line"></i> Add Group Under
                         </a>
                     </li>
                 </ol>
@@ -27,16 +27,16 @@
         </div>
     </div>
 
-    <!-- Categories Data Table -->
+    <!-- Group Unders Data Table -->
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <table id="category_table" class="table table-striped dt-responsive nowrap w-100">
+                    <table id="group_under_table" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Category Name</th>
+                                <th>Group Under Name</th>
                                 <th>Note</th>
                                 <th>Created At</th>
                                 <th>Actions</th>
@@ -55,11 +55,11 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            let table = $("#category_table").DataTable({
+            let table = $("#group_under_table").DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('categories.index', ['user_id' => auth()->id()]) }}", // Fetch categories data
+                    url: "{{ route('group_unders.index', ['user_id' => auth()->id()]) }}", // Fetch group under data
                     type: "GET",
                 },
                 columns: [
@@ -70,8 +70,8 @@
                     {
                         data: "actions", 
                         name: "actions", 
-                        orderable: false
-                        
+                        orderable: false,
+                        searchable: false
                     }
                 ]
             });

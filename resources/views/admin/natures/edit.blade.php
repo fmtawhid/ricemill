@@ -16,13 +16,13 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('categories.update', ['category' => $category->id, 'user_id' => auth()->id()]) }}" method="POST">
+                    <form action="{{ route('natures.update', ['nature' => $nature->id, 'user_id' => auth()->id()]) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="row">
                             <div class="mb-3 col-md-6">
-                                <label for="name" class="form-label">Category Name *</label>
-                                <input class="form-control" name="name" type="text" id="name" value="{{ old('name', $category->name) }}" required>
+                                <label for="name" class="form-label">Nature Name *</label>
+                                <input class="form-control" name="name" type="text" id="name" value="{{ old('name', $nature->name) }}" required>
                                 @error('name')
                                     <div class="text-danger my-2">{{ $message }}</div>
                                 @enderror
@@ -30,7 +30,7 @@
 
                             <div class="mb-3 col-md-6">
                                 <label for="note" class="form-label">Note (Optional)</label>
-                                <input class="form-control" name="note" type="text" id="note" value="{{ old('note', $category->note) }}">
+                                <input class="form-control" name="note" type="text" id="note" value="{{ old('note', $nature->note) }}">
                                 @error('note')
                                     <div class="text-danger my-2">{{ $message }}</div>
                                 @enderror

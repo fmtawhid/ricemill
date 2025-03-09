@@ -15,11 +15,11 @@
     <div class="row">
         <div class="col-12">
             <div class="page-title-box justify-content-between d-flex align-items-md-center flex-md-row flex-column">
-                <h4 class="page-title">Categories</h4>
+                <h4 class="page-title">Account Ledgers</h4>
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item">
-                        <a href="{{ route('categories.create', ['user_id' => auth()->id()]) }}" class="btn btn-primary">
-                            <i class="ri-add-circle-line"></i> Add Category
+                        <a href="{{ route('account_ledgers.create', ['user_id' => auth()->id()]) }}" class="btn btn-primary">
+                            <i class="ri-add-circle-line"></i> Add Account Ledger
                         </a>
                     </li>
                 </ol>
@@ -27,17 +27,22 @@
         </div>
     </div>
 
-    <!-- Categories Data Table -->
+    <!-- Account Ledgers Data Table -->
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <table id="category_table" class="table table-striped dt-responsive nowrap w-100">
+                    <table id="account_ledger_table" class="table table-striped dt-responsive nowrap w-100">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Category Name</th>
-                                <th>Note</th>
+                                <th>Account Ledger Name</th>
+                                <th>Account Group</th>
+                                <th>Phone Number</th>
+                                <th>Email</th>
+                                <th>Opening Balance</th>
+                                <th>Debit/Credit</th>
+                                <th>Status</th>
                                 <th>Created At</th>
                                 <th>Actions</th>
                             </tr>
@@ -55,23 +60,28 @@
 @section('scripts')
     <script>
         $(document).ready(function() {
-            let table = $("#category_table").DataTable({
+            let table = $("#account_ledger_table").DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('categories.index', ['user_id' => auth()->id()]) }}", // Fetch categories data
+                    url: "{{ route('account_ledgers.index', ['user_id' => auth()->id()]) }}", // Fetch account ledgers data
                     type: "GET",
                 },
                 columns: [
                     { data: "DT_RowIndex", name: "DT_RowIndex", orderable: false, searchable: false },
                     { data: "name", name: "name" },
-                    { data: "note", name: "note" },
+                    { data: "account_group_name", name: "account_group_name" }, // Display Account Group name
+                    { data: "phone_number", name: "phone_number" },
+                    { data: "email", name: "email" },
+                    { data: "opening_balance", name: "opening_balance" },
+                    { data: "debit_credit", name: "debit_credit" },
+                    { data: "status", name: "status" },
                     { data: "created_at", name: "created_at" },
                     {
                         data: "actions", 
                         name: "actions", 
-                        orderable: false
-                        
+                        orderable: false,
+                        searchable: false 
                     }
                 ]
             });
