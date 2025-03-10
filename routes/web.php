@@ -53,6 +53,9 @@ use App\Http\Controllers\NatureController;
 use App\Http\Controllers\GroupUnderController;
 use App\Http\Controllers\AccountGroupController;
 use App\Http\Controllers\AccountLedgerController;
+use App\Http\Controllers\SalesManController;
+use App\Http\Controllers\ProductController;
+
 
 
 
@@ -61,7 +64,7 @@ use App\Http\Controllers\AccountLedgerController;
 
 // Route::get('/', [SiteController::class, 'index'])->name('home');
 Route::get('/', function() {
-    return redirect()->route('dashboard' );
+    return redirect()->route('login' );
 });
 
 
@@ -84,6 +87,10 @@ Route::prefix('panel/{user_id}')->middleware(['auth', 'checkUserOwnership'])->gr
     Route::resource('group_unders', GroupUnderController::class);
     Route::resource('account_groups', AccountGroupController::class);
     Route::resource('account_ledgers', AccountLedgerController::class);
+    Route::resource('salesman', SalesManController::class); 
+    Route::resource('products', ProductController::class);
+
+
 
 
 

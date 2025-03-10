@@ -35,34 +35,29 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        // Total Posts count
-        $totalPosts = Post::count();
+        // // Total Posts count
+        // $totalPosts = Post::count();
         
-        // Posts from the last month
-        $lastMonthPosts = Post::where('created_at', '>=', Carbon::now()->subMonth())->count();
+        // // Posts from the last month
+        // $lastMonthPosts = Post::where('created_at', '>=', Carbon::now()->subMonth())->count();
         
-        // Pending Posts count
-        $pendingPosts = Post::where('status', 'pending')->count();
+        // // Pending Posts count
+        // $pendingPosts = Post::where('status', 'pending')->count();
         
-        // Posts pending today
-        $todayPendingPosts = Post::where('status', 'pending')
-                                ->whereDate('created_at', Carbon::today())
-                                ->count();
+        // // Posts pending today
+        // $todayPendingPosts = Post::where('status', 'pending')
+        //                         ->whereDate('created_at', Carbon::today())
+        //                         ->count();
         
-        // Total Gallery images count
-        $totalImages = Gallery::count();
+        // // Total Gallery images count
+        // $totalImages = Gallery::count();
         
-        // Gallery images uploaded last month
-        $lastMonthImages = Gallery::where('created_at', '>=', Carbon::now()->subMonth())->count();
+        // // Gallery images uploaded last month
+        // $lastMonthImages = Gallery::where('created_at', '>=', Carbon::now()->subMonth())->count();
 
         // Passing data to the view
         return view('admin.dashboard.index', [
-            'totalPosts' => $totalPosts,
-            'lastMonthPosts' => $lastMonthPosts,
-            'pendingPosts' => $pendingPosts,
-            'todayPendingPosts' => $todayPendingPosts,
-            'totalImages' => $totalImages,
-            'lastMonthImages' => $lastMonthImages
+            
         ]);
     }
 

@@ -32,7 +32,7 @@
                             <h5 class="text-muted text-uppercase fs-13 mt-0">Total Post</h5>
                             <h3 class="my-3">10</h3>
                             <p class="mb-0 text-muted text-truncate">
-                                <span class="badge bg-danger me-1"><i class="ri-arrow-down-line"></i> {{ $lastMonthPosts }}</span>
+                                <span class="badge bg-danger me-1"><i class="ri-arrow-down-line"></i> 10</span>
                                 <span>Since last month</span>
                             </p>
                         </div>
@@ -54,7 +54,7 @@
                             <h5 class="text-muted text-uppercase fs-13 mt-0">Pending Post</h5>
                             <h3 class="my-3">50</h3>
                             <p class="mb-0 text-muted text-truncate">
-                                <span class="badge bg-success me-1"><i class="ri-arrow-up-line"></i> {{ $todayPendingPosts }}</span>
+                                <span class="badge bg-success me-1"><i class="ri-arrow-up-line"></i> 20</span>
                                 <span>Today</span>
                             </p>
                         </div>
@@ -76,7 +76,7 @@
                             <h5 class="text-muted text-uppercase fs-13 mt-0">Total Gallery</h5>
                             <h3 class="my-3">50</h3>
                             <p class="mb-0 text-muted text-truncate">
-                                <span class="badge bg-success me-1"><i class="ri-arrow-up-line"></i> {{ $lastMonthImages }}</span>
+                                <span class="badge bg-success me-1"><i class="ri-arrow-up-line"></i> 10</span>
                                 <span>Since last month</span>
                             </p>
                         </div>

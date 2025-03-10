@@ -18,16 +18,29 @@ class LoginController extends Controller
      * @var string
      */
     // protected $redirectTo = '/customer/dashboard';
+    // protected function redirectTo()
+    // {
+    //     if (Auth::user()->isAdmin()) {
+    //         return '/panel/{user_id}/dashboard';
+    //     } elseif (Auth::user()->isCustomer()) {
+    //         return '/panel/{user_id}/dashboard';
+    //     }
+
+    //     return '/panel/{user_id}/dashboard';
+    // }
     protected function redirectTo()
     {
+        $userId = Auth::user()->id; // Get logged-in user's ID
+
         if (Auth::user()->isAdmin()) {
-            return '/panel/dashboard';
+            return "/panel/{$userId}/dashboard";
         } elseif (Auth::user()->isCustomer()) {
-            return '/panel/dashboard';
+            return "/panel/{$userId}/dashboard";
         }
 
-        return '/panel/dashboard';
+        return "/panel/{$userId}/dashboard";
     }
+
 
     /**
      * Create a new controller instance.

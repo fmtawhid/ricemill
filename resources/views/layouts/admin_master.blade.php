@@ -519,16 +519,34 @@
                     <!-- Teacher Section -->
                    
                         <li class="side-nav-item">
-                            <a data-bs-toggle="collapse" href="#teachersmenu" aria-expanded="false" class="side-nav-link">
+                            <a data-bs-toggle="collapse" href="#menuone" aria-expanded="false" class="side-nav-link">
                                 <i class="ri-user-line"></i>
-                                <span>Sort Type</span>
+                                <span>Account Info</span>
                                 <span class="menu-arrow"></span>
                             </a>
-                            <div class="collapse" id="teachersmenu">
+                            <div class="collapse" id="menuone">
+                                <ul class="side-nav-second-level">
+                                        <li><a href="{{ route('natures.index', ['user_id' => auth()->id()]) }}">Nature</a></li>
+                                        <li><a href="{{ route('group_unders.index', ['user_id' => auth()->id()]) }}">Group Under</a></li>
+                                        <li><a href="{{ route('account_groups.index', ['user_id' => auth()->id()]) }}">Account Group</a></li>
+                                        <li><a href="{{ route('account_ledgers.index', ['user_id' => auth()->id()]) }}">Account Ledger</a></li>
+                                        <li><a href="{{ route('salesman.index', ['user_id' => auth()->id()]) }}">Sales Man</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#menutwo" aria-expanded="false" class="side-nav-link">
+                                <i class="ri-user-line"></i>
+                                <span>Inventory Info</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="menutwo">
                                 <ul class="side-nav-second-level">
                                  
-                                        <li><a href="{{ route('units.index',['user_id' => auth()->id()]) }}">Units</a></li>
-                                        <li><a href="{{ route('currencies.index', ['user_id' => auth()->id()]) }}">Currency</a></li>
+                                <li><a href="{{ route('godowns.index',['user_id' => auth()->id()]) }}">GoDown </a></li>
+                                <li><a href="{{ route('units.index',['user_id' => auth()->id()]) }}">Units </a></li>
+                                <li><a href="{{ route('categories.index', ['user_id' => auth()->id()]) }}">Category</a></li>
+                                <li><a href="{{ route('products.index', ['user_id' => auth()->id()]) }}">Product Item</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -583,6 +601,8 @@
                             <li>
                                 <a href="{{ route('setting.index', ['user_id' => auth()->id()]) }}">Manage Setting</a>
                             </li>
+                            <li><a href="{{ route('units.index',['user_id' => auth()->id()]) }}">Units</a></li>
+                            <li><a href="{{ route('currencies.index', ['user_id' => auth()->id()]) }}">Currency</a></li>
                         </ul>
                     </div>
                 </li>
