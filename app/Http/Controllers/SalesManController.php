@@ -47,14 +47,17 @@ class SalesManController extends Controller
     // Store a new salesman
     public function store(Request $request)
     {
+        // Validate the incoming request
         $request->validate([
             'name' => 'required|max:255',
             'number' => 'required|max:15',
             'email' => 'nullable|email',
             'address' => 'nullable|string',
             'salary' => 'nullable|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Validate image
         ]);
-
+    
+        // Create a new SalesMan instance
         $salesMan = new SalesMan();
         $salesMan->name = $request->name;
         $salesMan->number = $request->number;
@@ -62,10 +65,30 @@ class SalesManController extends Controller
         $salesMan->address = $request->address;
         $salesMan->salary = $request->salary;
         $salesMan->user_id = auth()->id(); // Assign the logged-in user ID
+    
+        // Handle image upload if provided
+        if ($request->hasFile('image')) {
+            // Generate a unique name for the image
+            $imageName = time() . '.' . $request->image->extension();
+    
+            // Move the uploaded image to a directory
+            $request->image->move(public_path('img/salesman'), $imageName);
+    
+            // Save the image path to the database
+            $salesMan->image = 'salesman/' . $imageName;
+        }
+    
+        // Save the salesman record
         $salesMan->save();
-
+    
+        // Redirect with success message
         return redirect()->route('salesman.index', ['user_id' => auth()->id()])->with('success', 'Salesman created successfully!');
     }
+    
+    
+
+
+
 
     // Show the form to edit an existing salesman
     public function edit($id)
@@ -83,12 +106,14 @@ class SalesManController extends Controller
     // Update an existing salesman
     public function update(Request $request, $id)
     {
+        // Validate the incoming request
         $request->validate([
             'name' => 'required|max:255',
             'number' => 'required|max:15',
             'email' => 'nullable|email',
             'address' => 'nullable|string',
             'salary' => 'nullable|numeric',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',  // Image validation
         ]);
 
         $salesMan = SalesMan::findOrFail($id);
@@ -98,6 +123,19 @@ class SalesManController extends Controller
             return redirect()->route('salesman.index', ['user_id' => auth()->id()])->with('error', 'Unauthorized');
         }
 
+        // Handle the image upload if a new image is provided
+        if ($request->hasFile('image')) {
+            // Delete the old image if it exists
+            if ($salesMan->image && file_exists(public_path('storage/' . $salesMan->image))) {
+                unlink(public_path('storage/' . $salesMan->image));
+            }
+
+            // Store the new image
+            $imagePath = $request->file('image')->store('salesman_images', 'public');
+            $salesMan->image = $imagePath;
+        }
+
+        // Update the salesman fields
         $salesMan->update([
             'name' => $request->name,
             'number' => $request->number,
@@ -108,6 +146,7 @@ class SalesManController extends Controller
 
         return redirect()->route('salesman.index', ['user_id' => auth()->id()])->with('success', 'Salesman updated successfully!');
     }
+
 
     // Delete a salesman
     public function destroy($id)

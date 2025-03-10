@@ -16,7 +16,8 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('salesmen.store', ['user_id' => auth()->id()]) }}" method="POST">
+                    <form action="{{ route('salesman.store', ['user_id' => auth()->id()]) }}" method="POST" enctype="multipart/form-data">
+
                         @csrf
                         <div class="row">
                             <div class="mb-3 col-md-6">
@@ -55,6 +56,14 @@
                                 <label for="salary" class="form-label">Salary (Optional)</label>
                                 <input class="form-control" name="salary" type="number" id="salary" placeholder="Enter Salary">
                                 @error('salary')
+                                    <div class="text-danger my-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="image" class="form-label">Image (Optional)</label>
+                                <input class="form-control" name="image" type="file" id="image">
+                                @error('image')
                                     <div class="text-danger my-2">{{ $message }}</div>
                                 @enderror
                             </div>
