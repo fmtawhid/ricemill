@@ -76,7 +76,7 @@ class AccountLedgerController extends Controller
     }
 
     // Show the form to edit an existing account ledger
-    public function edit($id)
+    public function edit($user_id, $id)
     {
         $accountLedger = AccountLedger::findOrFail($id);
 
@@ -125,7 +125,7 @@ class AccountLedgerController extends Controller
     }
 
     // Delete an account ledger
-    public function destroy($id)
+    public function destroy($user_id, $id)
     {
         $accountLedger = AccountLedger::findOrFail($id);
 

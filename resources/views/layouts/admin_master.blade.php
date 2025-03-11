@@ -550,6 +550,22 @@
                                 </ul>
                             </div>
                         </li>
+                        <li class="side-nav-item">
+                            <a data-bs-toggle="collapse" href="#menuthree" aria-expanded="false" class="side-nav-link">
+                                <i class="ri-user-line"></i>
+                                <span>Payroll</span>
+                                <span class="menu-arrow"></span>
+                            </a>
+                            <div class="collapse" id="menuthree">
+                                <ul class="side-nav-second-level">
+                                 
+                                <li><a href="{{ route('departments.index',['user_id' => auth()->id()]) }}">Department </a></li>
+                                <li><a href="{{ route('designations.index',['user_id' => auth()->id()]) }}">Designation </a></li>
+                                <li><a href="{{ route('shifts.index', ['user_id' => auth()->id()]) }}">Shift</a></li>
+                                <li><a href="{{ route('payment_accounts.index', ['user_id' => auth()->id()]) }}">Bank Accounts</a></li>
+                                </ul>
+                            </div>
+                        </li>
 
 
 

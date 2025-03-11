@@ -75,7 +75,7 @@ class AccountGroupController extends Controller
     }
 
     // Show the form to edit an existing account group
-    public function edit($id)
+    public function edit($user_id, $id)
     {
         $accountGroup = AccountGroup::findOrFail($id);
 
@@ -116,7 +116,7 @@ class AccountGroupController extends Controller
     }
 
     // Delete an account group
-    public function destroy($id)
+    public function destroy($user_id, $id)
     {
         $accountGroup = AccountGroup::findOrFail($id);
 

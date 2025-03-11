@@ -85,9 +85,13 @@ class ProductController extends Controller
     }
 
     // Show the form to edit an existing product
-    public function edit($id)
+    public function edit($user_id,$id)
     {
         $product = Product::findOrFail($id);
+        // Ensure the logged-in user owns this nature
+        if ($product->user_id !== auth()->id()) {
+            return redirect()->route('products.index', ['user_id' => auth()->id()])->with('error', 'Unauthorized');
+        }
         $units = Unit::all();
         $categories = Category::all();
         $godowns = Godown::all();
@@ -130,11 +134,20 @@ class ProductController extends Controller
     }
 
     // Delete a product
-    public function destroy($id)
+    public function destroy($user_id, $id )
     {
         $product = Product::findOrFail($id);
+
+        // Ensure the logged-in user owns this product
+        if ($product->user_id !== (int)$user_id) {
+            return redirect()->route('products.index', ['user_id' => $user_id])->with('error', 'Unauthorized');
+        }
+
+        // Delete the product
         $product->delete();
 
-        return redirect()->route('products.index', ['user_id' => auth()->id()])->with('success', 'Product deleted successfully!');
+        // Redirect back to the products index page for the logged-in user
+        return redirect()->route('products.index', ['user_id' => $user_id])->with('success', 'Product deleted successfully!');
     }
+
 }

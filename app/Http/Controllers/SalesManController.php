@@ -13,7 +13,7 @@ class SalesManController extends Controller
     {
         if ($request->ajax()) {
             // Fetch the salesmen and filter by the logged-in user's ID
-            $salesMen = SalesMan::select(['id', 'name', 'number', 'address', 'image', 'email', 'salary', 'created_at'])
+            $salesMen = SalesMan::select(['id', 'name', 'number', 'email', 'address', 'image', 'email', 'salary', 'created_at'])
                 ->where('user_id', auth()->id())  // Filter by user_id
                 ->get();
 
@@ -91,7 +91,7 @@ class SalesManController extends Controller
 
 
     // Show the form to edit an existing salesman
-    public function edit($id)
+    public function edit($user_id, $id)
     {
         $salesMan = SalesMan::findOrFail($id);
 
@@ -149,7 +149,7 @@ class SalesManController extends Controller
 
 
     // Delete a salesman
-    public function destroy($id)
+    public function destroy($user_id, $id)
     {
         $salesMan = SalesMan::findOrFail($id);
 

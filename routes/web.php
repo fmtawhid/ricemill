@@ -55,6 +55,10 @@ use App\Http\Controllers\AccountGroupController;
 use App\Http\Controllers\AccountLedgerController;
 use App\Http\Controllers\SalesManController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\DesignationController;
+use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\PaymentAccountController;
 
 
 
@@ -89,6 +93,10 @@ Route::prefix('panel/{user_id}')->middleware(['auth', 'checkUserOwnership'])->gr
     Route::resource('account_ledgers', AccountLedgerController::class);
     Route::resource('salesman', SalesManController::class); 
     Route::resource('products', ProductController::class);
+    Route::resource('departments', DepartmentController::class);
+    Route::resource('designations', DesignationController::class);
+    Route::resource('shifts', ShiftController::class);
+    Route::resource('payment_accounts', PaymentAccountController::class);
 
 
 

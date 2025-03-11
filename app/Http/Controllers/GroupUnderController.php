@@ -60,7 +60,7 @@ class GroupUnderController extends Controller
     }
 
     // Show the form to edit an existing group under
-    public function edit($id)
+    public function edit($user_id, $id)
     {
         $groupUnder = GroupUnder::findOrFail($id);
 
@@ -96,7 +96,7 @@ class GroupUnderController extends Controller
     }
 
     // Delete a group under
-    public function destroy($id)
+    public function destroy($user_id, $id)
     {
         $groupUnder = GroupUnder::findOrFail($id);
 

@@ -59,6 +59,13 @@
                                     <div class="text-danger my-2">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="image" class="form-label">Image (Optional)</label>
+                                <input class="form-control" name="image" type="file" id="image">
+                                @error('image')
+                                    <div class="text-danger my-2">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update</button>

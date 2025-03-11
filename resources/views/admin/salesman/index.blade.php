@@ -36,12 +36,12 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Image</th>
                                 <th>Name</th>
                                 <th>Phone Number</th>
                                 <th>Email</th>
                                 <th>Address</th>
                                 <th>Salary</th>
-                                <th>Image</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -64,11 +64,22 @@
                 ajax: "{{ route('salesman.index', ['user_id' => auth()->id()]) }}",
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex' },  // Add Index column for numbering rows
+                    {
+                        data: "image",
+                        name: "image",
+                        render: function(data, type, row) {
+                            // Check if image exists, else show a placeholder image
+                            return data ? '<img src="{{ asset('img') }}/' + data +
+                                '" alt="Profile Image" style="width: 50px; height: 50px; object-fit: cover;">' :
+                                '<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGhFuhp-J1n_y1pfRjcFoRe_PFPgqXXt4OwafWjwoBuTfIbaRQX0Tt5F4&s" alt="Default Image" style="width: 50px; height: 50px; object-fit: cover;">';
+                        }
+                    },
                     { data: 'name', name: 'name' },  // Name column
                     { data: 'number', name: 'number' },  // Phone Number column
-                    { data: 'address', name: 'address' },  // Address column
-                    { data: 'image', name: 'image' },  // Image column (optional)
                     { data: 'email', name: 'email' },  // Email column
+                    { data: 'address', name: 'address' },  // Address column
+                    // { data: 'image', name: 'image' },  // Image column (optional)
+                    
                     { data: 'salary', name: 'salary' },  // Salary column
                     { data: 'actions', name: 'actions', orderable: false, searchable: false }  // Actions column (edit/delete)
                 ],

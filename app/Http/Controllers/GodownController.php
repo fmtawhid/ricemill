@@ -60,7 +60,7 @@ class GodownController extends Controller
     }
 
     // Show the form to edit an existing godown
-    public function edit($id)
+    public function edit($user_id, $id)
     {
         $godown = Godown::findOrFail($id);
 
@@ -96,7 +96,7 @@ class GodownController extends Controller
     }
 
     // Delete a godown
-    public function destroy($id)
+    public function destroy($user_id, $id)
     {
         $godown = Godown::findOrFail($id);
 

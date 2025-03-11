@@ -59,7 +59,7 @@ class CategoryController extends Controller
     }
 
     // Show the form to edit an existing category
-    public function edit($id)
+    public function edit($user_id, $id)
     {
         $category = Category::findOrFail($id);
 
@@ -95,7 +95,7 @@ class CategoryController extends Controller
     }
 
     // Delete a category
-    public function destroy($id)
+    public function destroy($user_id, $id)
     {
         $category = Category::findOrFail($id);
 
